@@ -1,0 +1,287 @@
+1) public variable to be accessed by others files should declare the variable with the starting name to be in captial letter. 
+   ex const LoginToken String = "09roasjdfoiasdjfoaisjdf-asdfasdf"
+
+2) https://pkg.go.dev/ is the site where the packages are available. 
+3) comma OK syntax or error OK syntax
+--------------------------------------
+ Since the go does not have the try catch block. 
+ The procedure fo applying the try cattch in go language is 
+   success, error = ( conditional statement );
+
+   if there is success we need to take a look at the success variable else we need to look at the error variable. 
+4) In Go Lang we the the pointers(*) and address(&) concept just like the 'C' language. 
+5) Memory management is totally taken care by the Garbage collector , but subtle handling can be controlled by the programmer. 
+6) In order to create a exe in Go lang 
+    the command is go build. 
+    If you want to build the executable for linux or MAC then we need to give the command as 
+    > GOOS="linux"  go build. 
+7) Arrays are restricted in GO so can't expect a bigger role like how we do in other languages. 
+    When using arrays in between if we skip to set the data then we get a empty. 
+
+8) Slices are an abstraction over arrays infact has more features than arrays. 
+    1) Slices provide you to initialize an array with default content. 
+    2) Slices provide you to increase the array after initializing in the flow of the program using the append method. 
+    3) Slices provide you to sort the array content. 
+
+    Going forward slices are the ones that are supposed to be used than arrays. 
+    There are two ways of declaring an slice
+     Syntax 1: in this way of syntax we need to initialize the slice. 
+     ------------------------------------------------------------------
+      var fruitlist = [] string {"Apple","Banana","Guava"}
+
+      Using the append method
+      ------------------------
+      fruitList = append(fruitList,"Mango","Custard")
+
+      If we want to break the slice into multiple slices then we use the following syntax
+        fruitList = append(fruitList[1:])
+        The [1:] in the above statement states that the to cut a slice starting from position 1 (Position of the slice start from 0). With this we drop the content "Apple" and move the cursor from "Banana"
+
+     Considering the fruitList having the content [apple,banana,guava,mango and custard] in the slice When range is given for selecting the content  the ending range number is not included as mentioned below 
+      
+      fruitList = append(fruitList[1:3])
+     With the above statement we see that the slice will have the content from "banana" whereas it will exclude the "mango" 
+
+     fruitList = append(fruitList[:3])
+     The last value is not included in the list. 
+
+     Syntax 2: Another approach for declaring the slice  
+     ---------------------------------------------------
+       highScores := make([]int,3)
+       By declaring like the above we are declaring a size and initializing.
+
+       highScores[0]=111
+       highScores[1]=222
+       highScores[2]=232
+
+       highScores = append(highScores,433,223)
+
+    Sorting of Slices
+    ------------------
+    sort is a package in go 
+    sort.Ints(highScores) returns sorted highscores. 
+
+** append re-allocates the memory and creates a new structure. 
+ Deleting the values in slice
+ ----------------------------
+ In order to delete the value from slice we have to use the append method
+  var courses = []string{"reactjs","javascript","swift","python","ruby"}
+
+In order delete the value of swift in the slice we need to give it as mentioned below 
+    var index int = 2 
+    courses = append(courses[:index],courses[index+1:]...)
+
+
+    Maps 
+    ----
+    In order to create a map we are use the following syntax. 
+    
+    languages := make(map[string]string)
+    Over here we are creating a map which has the key is string type and also the value as string type.
+
+    for map of integer as key and value as string we give it as follow
+    integerLanguages := make(map[int]string)
+
+    loading of the data in the maps
+    --------------------------------
+    languages["JS"] = "JavaScript"
+    languages["PY"] = "Python"
+    languages["RB"] = "Ruby"
+
+    Extracting a single value from Map
+    ----------------------------------
+    languages["JS"]
+
+    Deleting the value from map
+    ----------------------------
+    we need to use the delete key word. This can also be used in slice
+    delete (languages,"RB")
+
+    looping through the map
+    -----------------------
+    This is almost like foreach loop
+
+    for key,value := range languages{
+        fmt.Printf("For key %v, value is %v",key,value)
+
+    }
+
+    There is some thing to debug with fmt.Println
+
+    Structure in go lang
+ ---------------------------
+  Declaring the structure 
+  -----------------------
+  type User struct {
+        Name String
+        Email String
+         Age String
+  }
+
+
+  Instantiating the structure can be done in 3 ways
+
+    1) Approach 1 (Used usually)
+    -----------------------------
+        rob := User{"rob","rob@xyz.com","21"} 
+
+    2) Approach 2 (Goes with the reference)
+    ----------------------------------------
+        var sam = new (User)
+        sam.Email = "Sam@xyz.com"
+        sam.Name = "Sam"
+        sam.Age = "33"
+
+        When printing the content in the type of creation of using the new operator , we see that the output comes up with a &. The reference of the object is being returned when the new key word is used. 
+
+
+
+    3) Appraoch 3 
+    --------------
+    var tobby = &User{"tobby", "tobby@xyz.com", "43"}
+
+
+//more information is printed on the console
+    fmt.Printf("%+v\n", rob)
+
+        CONTROL FLOW STATEMENTS
+----********************************-----------------------
+    IF ELSE in GOLANG
+    ------------------
+                var result string
+
+                Approach 1
+                ----------
+                if loginCount < 10 {
+                    result = "login count less than 10"
+                } else if loginCount > 10 {
+                    result = " login count greater than 10"
+                } else { 
+                    result = " login count exactly 10"
+                    }
+                    
+                Approach 2 (Declare the variable and check the condition in if statement)
+                -------------------------------------------------------------------------
+                if numb := 3 ; numb < 10 {
+                    result = "Number is less than 10"
+                }
+
+    SWITCH case in GOLANG
+    ---------------------
+        var diceNumber int
+        switch diceNumber{
+             case 1:
+             case 2:
+             case 3:
+                 //Operation
+                 fallthrough
+             case4:
+             default: 
+        }
+
+There is no break statement in the switch case. In order to execute case 3 and case4 then fallthrough is the statement to be given so that both the cases are executed. 
+
+
+***In order to generate a random number below is the statement to given 
+    rand.seed(time.Now().UnixNano())
+
+ In golang we have the following statements conditions 
+ 1) for statement
+    --------------
+        syntax 1
+        --------
+        for d := 0; d < len(days); d++ {}
+
+        Syntax 2
+        --------
+        for i := range days {}
+
+        Syntax 3
+        --------
+        for _ , day := range days {} 
+
+ 2) goto statement
+ 3) break
+ 4) continue.
+
+ Note that there is no while or do while 
+
+ Functions
+ ---------
+    syntax 1:
+    ---------
+
+        func functionName(value type,value type ) returnType
+    eg:
+            func add(val1 int,val2 int) int {
+
+                return val1+val2
+            }
+
+    Syntax 2: Supporting numerous values of same type
+    -------------------------------------------------
+    
+        func functionaName(values ... datatype) returnType
+        
+        eg: func adder(values ... int) int {
+            total := 0
+            //Over here the values received is slice. 
+                for _,val := range values{
+                    total += val
+                }
+        }
+
+
+Methods
+-------
+
+    We write the methods basically for the structs. So structs should be there for the methods. 
+    declaring the method is of the below format. 
+    func (structVariable Struct) methodName(){
+
+    }
+
+Defer keyword
+-------------
+Defer is the keywork placed before the statement.
+ eg
+ defer fmt.Println("Hi this is defer")
+
+ When a statement has defer keyword statement , then the statement after the defer is not executed immediately. It will be executed at the end of the function. 
+
+ If there are multiple defer statements then the system is going to defer them and execute them at the end of the function by applying the LIFO method mechanism. 
+
+
+NOTE : When ever we are receiving the data from the Web we will be getting in bytes format. We need to convert the bytes to String format. 
+
+
+GoLang tooling
+--------------
+
+Go gives a lot of tools called tooling. 
+> go build is a command used for getting your code production ready after which you can even run.This command builds the executable. 
+  go build . is the command given to build everything. 
+> go run is also a command like go build but at low cost 
+> go mod is also tool in the same. 
+> go mod tidy is used for cleaning up any indirect statements in the mod file. Remember this is a costly operation 
+> go env is used for displaying the environment variables. 
+> go mod verify is going to verify all the modules 
+> go list -m all is an very expensive operation. It will display all the packages are used in the project
+> go mod graph shows the list of graph dependencies
+> go mod why also has the dependency list
+
+
+Refer to Semver.org for patching release and release
+gorilla/mux is a routing component in go lang 
+
+
+
+
+
+
+
+
+
+
+
+ 
