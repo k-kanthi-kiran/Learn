@@ -2,6 +2,8 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
+	"log"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -18,7 +20,7 @@ type Course struct {
 }
 
 type Author struct {
-	FullName string `json:"fullName"`
+	Fullname string `json:"fullname"`
 	Website  string `json:"website"`
 }
 
@@ -32,6 +34,19 @@ func (c *Course) IsEmpty() bool {
 }
 
 func main() {
+
+	r := mux.NewRouter()
+
+	courses = append(courses, Course{CourseId: "2", CourseName: "ReactJS", CoursePrice: 299, Author: &Author{Fullname: "Hitesh Choudhary", Website: "lco.dev"}})
+	courses = append(courses, Course{CourseId: "4", CourseName: "MERN Stack", CoursePrice: 199, Author: &Author{Fullname: "Hitesh Choudhary", Website: "go.dev"}})
+	r.HandleFunc("/", serveHome).Methods("GET")
+	r.HandleFunc("/courses", getAllCourse).Methods("GET")
+	r.HandleFunc("/course/{id}", getOneCourse).Methods("GET")
+	r.HandleFunc("/course/", createOneCourse).Methods("POST")
+	r.HandleFunc("/course/{id}", updateOneCourse).Methods("PUT")
+	r.HandleFunc("/course/{id}", deleteOneCourse).Methods("DELETE")
+
+	log.Fatal(http.ListenAndServe(":4000", r))
 
 }
 
@@ -53,19 +68,23 @@ func getOneCourse(w http.ResponseWriter, r *http.Request) {
 
 	//looping through the courses which are slices.
 	for _, course := range courses {
+		fmt.Println("Value of Params is :%T", params["id"])
+		fmt.Println("Value of CourseId is :%T", course.CourseId)
+
 		if course.CourseId == params["id"] {
 			json.NewEncoder(w).Encode(course)
-			return
+			break
 		}
+
 		json.NewEncoder(w).Encode("No Course found  with the given Id")
-		return
+
 	}
 
 }
 
 //Create of resource
 func createOneCourse(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("content-type", "application/json")
+	w.Header().Set("Content-Type", "application/json")
 	//Scenario when no body is sent in the request
 	if r.Body == nil {
 		json.NewEncoder(w).Encode("Please send some data")
@@ -92,13 +111,13 @@ func createOneCourse(w http.ResponseWriter, r *http.Request) {
 
 //Updation
 func updateOneCourse(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("content-type", "application/json")
+	w.Header().Set("Content-Type", "application/json")
 	//Scenario when no body is sent in the request
 
 	//fetching the information from request
 	params := mux.Vars(r)
 	for index, course := range courses {
-		if course.CourseId == params["Id"] {
+		if course.CourseId == params["id"] {
 			courses = append(courses[:index], courses[index+1:]...)
 			var course Course
 			_ = json.NewDecoder(r.Body).Decode(&course)
@@ -115,7 +134,6 @@ func deleteOneCourse(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
 
 	params := mux.Vars(r)
-
 	for index, course := range courses {
 		if course.CourseId == params["id"] {
 			courses = append(courses[:index], courses[index+1:]...)
